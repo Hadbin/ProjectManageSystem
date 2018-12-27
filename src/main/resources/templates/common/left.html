@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="ThemeBucket">
+
+    <!--<link rel="shortcut icon" href="#" type="image/png">-->
+
+</head>
+
+<body class="sticky-header">
+<div th:fragment="left">
+    <!-- left side start-->
+    <div class="left-side sticky-left-side">
+
+        <!--logo and iconic logo start-->
+        <div class="logo">
+            <a href="Page/index.jsp"><img src="images/logo10.png" alt=""></a>
+        </div>
+
+        <div class="logo-icon text-center">
+            <a href="Page/index.jsp"><img src="images/logo8.png" alt=""></a>
+        </div>
+        <!--logo and iconic logo end-->
+
+
+        <div class="left-side-inner">
+
+            <!-- visible to small devices only -->
+            <div class="visible-xs hidden-sm hidden-md hidden-lg">
+                <div class="media logged-user">
+                    <!--<img alt="" src="images/photos/user-avatar.png" class="media-object">-->
+                    <div class="media-body">
+                        <h4><a href="#"><%=u.getName()%></a></h4>
+                        <span>"Hello There..."</span>
+                    </div>
+                </div>
+
+                <h5 class="left-nav-title">Account Information</h5>
+                <ul class="nav nav-pills nav-stacked custom-nav">
+                    <li><a href="#"><i class="fa fa-user"></i> <span>Profile</span></a></li>
+                    <li><a href="#"><i class="fa fa-cog"></i> <span>Settings</span></a></li>
+                    <li><a href="#"><i class="fa fa-sign-out"></i> <span>Sign Out</span></a></li>
+                </ul>
+            </div>
+
+            <!--sidebar nav start-->
+            <ul class="nav nav-pills nav-stacked custom-nav conappend">
+                <li><a th:href="@{#}" id="index"><i class="fa fa-home"></i> <span>首页</span></a></li>
+                <li class="menu-list liXiang" style="display: none"><a href=""><i class="fa fa-laptop"></i>
+                    <span>立项管理</span></a>
+                    <ul class="sub-menu-list ">
+
+                        <li style="display: none" id="PId9"><a href="hangApply.jsp"> 文件发布</a></li>
+                        <li style="display: none" id="PId10"><a href="apply.jsp"> 文件查看</a></li>
+                        <li style="display: none" id="PId11"><a href="apply.jsp"> 项目申报</a></li>
+                        <li style="display: none" id="PId12"><a href="apply.jsp"> 业务受理</a></li>
+                        <li style="display: none" id="PId13"><a href="apply.jsp"> 立项评审</a></li>
+                        <li style="display: none" id="PId14"><a href="apply.jsp"> 项目发布</a></li>
+
+                    </ul>
+                </li>
+                <li class="menu-list nav-active jinDu" style="display: none"><a href=""><i class="fa fa-book"></i>
+                    <span>进度管理</span></a>
+                    <ul class="sub-menu-list ">
+
+                        <li style="display: none" id="PId15"><a href="linepole.jsp" id="navpole"> 进度汇报</a></li>
+                        <li style="display: none" id="PId16"><a href="hangline.jsp" id="navhang"> 进度查看</a></li>
+
+                    </ul>
+                </li>
+
+                <li class="menu-list shenHe" style="display: none"><a href="" id="navfault"><i
+                        class="fa fa-bullhorn"></i> <span>审核管理</span></a>
+                    <ul class="sub-menu-list ">
+
+                        <li style="display: none" id="PId17"><a href="linepole.jsp"> 工办审核</a></li>
+                        <li style="display: none" id="PId18"><a href="hangline.jsp"> 结果审核</a></li>
+                        <li style="display: none" id="PId19"><a href="hangline.jsp"> 资料审核</a></li>
+                        <li style="display: none" id="PId20"><a href="hangline.jsp"> 验收结果审核I</a></li>
+                        <li style="display: none" id="PId21"><a href="hangline.jsp"> 验收结果审核II</a></li>
+
+                    </ul>
+                </li>
+                <li class="menu-list shenPi" style="display: none"><a href="" id="navmap"><i class="fa fa-bullhorn"></i>
+                    <span>审批管理</span></a>
+                    <ul class="sub-menu-list ">
+
+                        <li style="display: none" id="PId22"><a href="linepole.jsp"> 项目审批</a></li>
+                        <li style="display: none" id="PId23"><a href="hangline.jsp"> 验收审批</a></li>
+                        <li style="display: none" id="PId24"><a href="hangline.jsp"> 验收结果审批</a></li>
+
+                    </ul>
+                </li>
+
+                <li class="menu-list yanShou" style="display: none"><a href=""><i class="fa fa-tasks"></i>
+                    <span>验收管理</span></a>
+                    <ul class="sub-menu-list ">
+                        <li style="display: none" id="PId25"><a href="linepole.jsp"> 验收资料填报</a></li>
+                        <li style="display: none" id="PId26"><a href="hangline.jsp"> 验收资料阅读</a></li>
+                        <li style="display: none" id="PId27"><a href="hangline.jsp"> 撰写验收意见</a></li>
+                        <li style="display: none" id="PId28"><a href="hangline.jsp"> 验收结果发布</a></li>
+                    </ul>
+                </li>
+                <li class="menu-list shenJi" style="display: none"><a href=""><i class="fa fa-tasks"></i>
+                    <span>审计管理</span></a>
+                    <ul class="sub-menu-list ">
+                        <li style="display: none" id="PId29"><a href="linepole.jsp"> 财务审计</a></li>
+                        <li style="display: none" id="PId30"><a href="linepole.jsp"> 输入审计报告</a></li>
+                    </ul>
+                </li>
+
+                <li class="menu-list xiTong" style="display: none"><a href=""><i class="fa fa-tasks"></i>
+                    <span>系统管理</span></a>
+                    <ul class=" sub-menu-list">
+
+                        <li style="display: none" id="PId31"><a href="sysprm.jsp"> 参数管理</a></li>
+                        <li style="display: none" id="PId32"><a th:href="@{../admin/dicManage}">字典管理</a></li>
+                        <li style="display: none" id="PId33"><a th:href="@{../admin/userRole}"> 用户/角色管理</a></li>
+                        <li style="display: none" id="PId34"><a th:href="@{../admin/rolePermission}">权限/角色管理</a></li>
+                        <li style="display: none" id="PId35"><a href="unit.jsp"> 专家库管理</a></li>
+                        <li style="display: none" id="PId36"><a th:href="@{../admin/streetManage}"> 乡镇街道管理</a></li>
+
+                    </ul>
+                </li>
+                <li><a href="login.jsp"><i class="fa fa-sign-in"></i> <span>登入</span></a></li>
+
+
+            </ul>
+            <!--sidebar nav end-->
+        </div>
+    </div>
+    <script type="text/javascript" th:inline="javascript">
+        $(document).ready(function () {
+           // alert("userId="+[[${session.userInfo.userId}]]);
+            $.ajax({
+                type: "get",
+                url: '../user/getUserAllPermission?userId=' + [[${session.userInfo.userId}]],
+                asyn: false,
+                dataType: "json",
+                error: function () {
+                    alert("请求超时，请重试");
+                }, success: function (data) {
+
+                    var roles =data;
+                    /*
+                       RoleId: 在数据库中RoleId=ParentId
+                    * 领导1
+                    * 工办2
+                    * 企业3
+                    * 专家4
+                    * 业务人员5
+                    * 审计6
+                    * 管理员7
+                    * */
+                    for (var i = 0; i < roles.length; i++) {
+                         //alert("RoleId="+roles[i].roleId);
+                        /*if (roles[i].roleId == 1) {
+                            //显示领导功能
+                            /!*$(".applyappend").append('<li><a  href="' + info.url + '" id="' + info.memo + '">' + info.title + '</a></li>');*!/
+                            $("." + "liXiang").show();
+                            $(".jinDu").show();
+                            $(".shenPi").show();
+                        }
+                        if (roles[i].roleId == 2) {
+                            //显示工办人员功能
+                            $(".liXiang").show();
+                            $(".jinDu").show();
+                            $(".shenHe").show();
+                            $(".shenPi").show();
+                        }
+                        if (roles[i].roleId == 3) {
+                            //显示企业人员功能
+                            $(".liXiang").show();
+                            $(".jinDu").show();
+                            $(".yanShou").show();
+                        }
+                        if (roles[i].roleId == 4) {
+                            //显示专家功能
+                            $(".liXiang").show();
+                            $(".yanShou").show();
+                            // $(".mapappend").append('<a href="' + info.url + '" id="' + info.memo + '"><i class="fa fa-bullhorn"></i> <span>' + info.title + '</span></a>');
+
+                        }
+                        if (roles[i].roleId == 5) {
+                            //显示业务人员功能
+                            $(".liXiang").show();
+                            $(".jinDu").show();
+                            $(".shenHe").show();
+                            $(".yanShou").show();
+
+                        }
+                        if (roles[i].roleId == 6) {
+                            //显示审计人员管理
+                            $(".liXiang").show();
+                            $(".shenJi").show();
+
+                        }
+                        if (roles[i].roleId == 7) {
+                            //显示系统管理员功能
+                            // $(".sysappend").append('<li><a  href="' + info.url + '" id="' + info.memo + '">' + info.title + '</a></li>');
+                            $(".xiTong").show();
+                        }*/
+                        for (var j = 0; j < roles[i].permissions.length; j++) {
+                            // alert("PermissionId="+roles[i].permissions[j].permissionId);
+                            if(roles[i].permissions[j].permissionId >=9 && roles[i].permissions[j].permissionId<=14)
+                                $("." + "liXiang").show();
+                            else if(roles[i].permissions[j].permissionId >=15 && roles[i].permissions[j].permissionId<=16)
+                                $("." + "jinDu").show();
+                            else if(roles[i].permissions[j].permissionId >=17 && roles[i].permissions[j].permissionId<=21)
+                                $("." + "shenHe").show();
+                            else if(roles[i].permissions[j].permissionId >=22 && roles[i].permissions[j].permissionId<=24)
+                                $("." + "shenPi").show();
+                            else if(roles[i].permissions[j].permissionId >=25 && roles[i].permissions[j].permissionId<=28)
+                                $("." + "yanShou").show();
+                            else if(roles[i].permissions[j].permissionId >=29 && roles[i].permissions[j].permissionId<=30)
+                                $("." + "shenJi").show();
+                            else if(roles[i].permissions[j].permissionId >=31 && roles[i].permissions[j].permissionId<=35)
+                                $("." + "xiTong").show();
+                            $("#PId" + roles[i].permissions[j].permissionId).show();
+                        }
+
+                    }
+                }
+            });
+            // var optionerType = [[${session.optionerType}]];
+            // alert("type="+optionerType);
+            // alert("optionerType="+optionerType);
+            //var roles=[[${roles}]];
+
+
+        })
+    </script>
+</div>
+<!-- left side end-->
+
+</body>
+
+</html>

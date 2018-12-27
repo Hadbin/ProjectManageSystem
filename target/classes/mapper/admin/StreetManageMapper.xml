@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="edu.nbut.project_manage.dao.admin.StreetManageDao">
+    <select id="selectAllStreet" resultType="Street">
+        select *
+        from Street
+        where Status=1
+        order by StreetId
+    </select>
+    <insert id="insertStreet" parameterType="String">
+        insert into Street
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="streetTitle != null">
+                Title,
+            </if>
+            <if test="streetCode != null">
+               Code,
+            </if>
+            <if test="streetRemarks !=null">
+                Remarks
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="streetTitle != null">
+                #{streetTitle,jdbcType=VARCHAR},
+            </if>
+            <if test="streetCode != null">
+                #{streetCode,jdbcType=VARCHAR},
+            </if>
+            <if test="streetRemarks != null">
+                #{streetRemarks,jdbcType=VARCHAR}
+            </if>
+        </trim>
+    </insert>
+    <update id="deleteStreetByStreetId" parameterType="Integer">
+        update Street
+        set Status=0
+        where StreetId =#{streetId,jdbcType=INTEGER}
+    </update>
+
+    <update id="updateStreet" parameterType="String">
+        update Street
+        <set>
+            <if test="streetTitle !=null">
+                Title =#{streetTitle,jdbcType=VARCHAR},
+            </if>
+            <if test="streetCode !=null">
+                Code =#{streetCode,jdbcType=VARCHAR},
+            </if>
+            <if test="streetRemarks !=null">
+                Remarks =#{streetRemarks,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where StreetId=#{streetId,jdbcType=VARCHAR}
+    </update>
+
+</mapper>

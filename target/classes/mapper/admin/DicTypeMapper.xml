@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="edu.nbut.project_manage.dao.admin.DicTypeDao">
+    <resultMap id="BaseResultMap" type="edu.nbut.project_manage.bean.entity.DicType">
+        <id column="DicTypeId" jdbcType="INTEGER" property="dicTypeId" />
+        <result column="Title" jdbcType="VARCHAR" property="title" />
+        <result column="Remarks" jdbcType="VARCHAR" property="remarks" />
+    </resultMap>
+    <select id="selectAllDicType" resultMap="BaseResultMap">
+    select * from dbo.DicType order by DicTypeId
+  </select>
+
+    <insert id="insertDicType" parameterType="edu.nbut.project_manage.bean.entity.DicType">
+        insert into dbo.DicType
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="title != null">
+                Title,
+            </if>
+            <if test="remarks != null">
+                Remarks,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="title != null">
+                #{title,jdbcType=VARCHAR},
+            </if>
+            <if test="remarks != null">
+                #{remarks,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateDicType" parameterType="edu.nbut.project_manage.bean.entity.DicType">
+        update dbo.DicType
+        <set>
+            <if test="title != null">
+                Title = #{title,jdbcType=VARCHAR},
+            </if>
+            <if test="remarks != null">
+                Remarks = #{remarks,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where DicTypeId = #{dicTypeId,jdbcType=INTEGER}
+    </update>
+    <delete id="deleteDicTypeById" parameterType="java.lang.Integer">
+    delete from dbo.DicType
+    where DicTypeId = #{dicTypeId,jdbcType=INTEGER}
+  </delete>
+</mapper>

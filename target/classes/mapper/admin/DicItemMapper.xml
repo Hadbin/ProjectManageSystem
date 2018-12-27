@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="edu.nbut.project_manage.dao.admin.DicItemDao">
+    <resultMap id="BaseResultMap" type="edu.nbut.project_manage.bean.entity.DicItem">
+        <id column="DicItemId" jdbcType="INTEGER" property="dicItemId"/>
+        <result column="Title" jdbcType="VARCHAR" property="title"/>
+        <result column="Code" jdbcType="VARCHAR" property="code"/>
+        <result column="DicTypeId" jdbcType="INTEGER" property="dicTypeId"/>
+        <result column="Remarks" jdbcType="VARCHAR" property="remarks"/>
+    </resultMap>
+    <select id="selectAllDicItem" resultMap="BaseResultMap" parameterType="Map">
+        select * from dbo.DicItem
+        <if test="typeId != null">
+            where DicTypeId=#{typeId}
+        </if>
+        order by DicItem.DicItemId
+    </select>
+    <insert id="insertDicItem" parameterType="edu.nbut.project_manage.bean.entity.DicItem">
+        insert into dbo.DicItem
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="title != null">
+                Title,
+            </if>
+            <if test="code != null">
+                Code,
+            </if>
+            <if test="dicTypeId != null">
+                DicTypeId,
+            </if>
+            <if test="remarks != null">
+                Remarks,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="title != null">
+                #{title,jdbcType=VARCHAR},
+            </if>
+            <if test="code != null">
+                #{code,jdbcType=VARCHAR},
+            </if>
+            <if test="dicTypeId != null">
+                #{dicTypeId,jdbcType=INTEGER},
+            </if>
+            <if test="remarks != null">
+                #{remarks,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateDicItem" parameterType="edu.nbut.project_manage.bean.entity.DicItem">
+        update dbo.DicItem
+        <set>
+            <if test="title != null">
+                Title = #{title,jdbcType=VARCHAR},
+            </if>
+            <if test="code != null">
+                Code = #{code,jdbcType=VARCHAR},
+            </if>
+            <if test="dicTypeId != null">
+                DicTypeId = #{dicTypeId,jdbcType=INTEGER},
+            </if>
+            <if test="remarks != null">
+                Remarks = #{remarks,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where DicItemId = #{dicItemId,jdbcType=INTEGER}
+    </update>
+    <delete id="deleteDicItemById" parameterType="java.lang.Integer">
+    delete from dbo.DicItem
+    where DicItemId = #{dicItemId,jdbcType=INTEGER}
+  </delete>
+
+    <select id="getRoleTitle" resultType="String" parameterType="String">
+        select Title
+        from DicItem
+        where DicTypeId=2 and Code=#{roleTitle};
+    </select>
+    <!--以下方法暂时没用到-->
+    <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultType="String">
+    select
+    Title
+    from dbo.DicItem
+    where DicItemId = #{dicItemId,jdbcType=INTEGER}
+  </select>
+
+
+</mapper>

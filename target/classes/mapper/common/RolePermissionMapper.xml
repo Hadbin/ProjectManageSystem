@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="edu.nbut.project_manage.dao.common.RolePermissionDao">
+    <resultMap id="BaseResultMap" type="edu.nbut.project_manage.bean.entity.RolePermission">
+        <result column="RoleId" jdbcType="INTEGER" property="roleId"/>
+        <result column="PermissionId" jdbcType="INTEGER" property="permissionId"/>
+        <result column="PermissionId" jdbcType="INTEGER" property="id"/>
+        <result column="Checked" jdbcType="BOOLEAN" property="checked"/>
+        <result column="Title" jdbcType="VARCHAR" property="text"/>
+        <result column="r" jdbcType="VARCHAR" property="c"/>
+        <collection property="children" column="{parentId=PermissionId,roleId=r}" select="getRolePermission"/>
+    </resultMap>
+    <select id="getRolePermission" resultMap="BaseResultMap" parameterType="java.util.Map">
+      SELECT [Permission].PermissionId, [Permission].Title, [Permission].Remarks,RoleId,#{roleId} as r,
+      CASE WHEN RoleId IS NULL THEN 0 ELSE 1 END AS Checked
+      FROM [Permission] LEFT JOIN(
+          SELECT RoleId, RolePermission.PermissionId
+          FROM RolePermission
+          WHERE (RoleId = #{roleId})) AS T
+	      ON [Permission].PermissionId = T.PermissionId
+	  WHERE ([Permission].Parentid =#{parentId})
+	  ORDER BY [Permission].idx;
+  </select>
+    <select id="selectCountRolePermission" parameterType="java.util.Map" resultType="java.lang.Integer">
+    select count(*) from dbo.RolePermission where RoleId=#{roleId} and PermissionId=#{parentId}
+  </select>
+
+    <delete id="deleteRolePermission" parameterType="java.lang.Integer">
+    delete from dbo.RolePermission
+    where RoleId = #{roleId,jdbcType=INTEGER} and PermissionId=#{parentId,jdbcType=INTEGER}
+  </delete>
+
+    <insert id="insertRolePermission" parameterType="java.util.Map">
+    insert into dbo.RolePermission ( RoleId, PermissionId) values ( #{roleId}, #{parentId})
+  </insert>
+
+</mapper>

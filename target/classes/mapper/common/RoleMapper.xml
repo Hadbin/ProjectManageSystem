@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="edu.nbut.project_manage.dao.common.RoleDao">
+
+    <resultMap id="BaseResultMap" type="edu.nbut.project_manage.bean.entity.Role">
+        <id column="RoleId" jdbcType="INTEGER" property="roleId" />
+        <result column="Title" jdbcType="VARCHAR" property="title" />
+        <result column="Remarks" jdbcType="VARCHAR" property="remarks" />
+    </resultMap>
+    <select id="getAllRole" resultMap="BaseResultMap">
+    select * from Role
+  </select>
+</mapper>

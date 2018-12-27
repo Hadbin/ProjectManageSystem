@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="ThemeBucket">
+    <title>乡镇街道管理</title>
+
+    <link rel="shortcut icon" href="#" type="image/png">
+    <link rel="stylesheet" type="text/css" th:href="@{/easyui/themes/default/easyui.css}">
+    <link th:href="@{/css/style.css}" rel="stylesheet">
+    <link th:href="@{/css/style-responsive.css}" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" th:href="@{/js/table/jquery.dataTables.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/easyui/themes/icon.css}">
+    <link href="//cdn.bootcss.com/jquery-confirm/3.1.0/jquery-confirm.min.css" rel="stylesheet">
+    <script type="text/javascript" th:src="@{/js/jquery.min.js}"></script>
+    <script type="text/javascript" charset="utf8" th:src="@{/js/table/jquery.dataTables.js}"></script>
+    <script type="text/javascript" th:src="@{/js/data-tables/DT_bootstrap.js}"></script>
+    <script type="text/javascript" th:src="@{/easyui/jquery.easyui.min.js}"></script>
+    <script type="text/javascript" th:src="@{/easyui/locale/easyui-lang-zh_CN.js}"></script>
+    <script src="//cdn.bootcss.com/jquery-confirm/3.1.0/jquery-confirm.min.js"></script>
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+    <script type="text/javascript" th:src="@{/js/html5shiv.js}"></script>
+    <script type="text/javascript" th:src="@{/js/respond.min.js}"></script>
+    <![endif]-->
+
+    <style>
+        .dataTables_length {
+            margin-left: 20px;
+        }
+
+        .adv-table .dataTables_length select {
+            padding: 0;
+        }
+    </style>
+</head>
+
+<body class="sticky-header">
+
+<section>
+    <!-- left side start-->
+    <div th:replace="common/left::left"></div>
+    <!-- left side end-->
+
+    <!-- main content start-->
+    <div class="main-content">
+
+
+        <!-- header section start-->
+        <div th:include="common/head:: head"></div>
+        <!-- header section end-->
+        <div class="wrapper">
+            <div class="row">
+                <div class="col-sm-12">
+                    <section class="panel">
+                        <header class="panel-heading">
+                            <span style="font-size:30px;">乡镇街道管理</span>
+                            <span class="tools pull-right">
+                            	<button class="btn btn-primary btn-block" type="button" onclick="addStreet()">添加街道 <i
+                                        class="fa fa-plus"></i></button>
+                            </span>
+                        </header>
+                        <div class="panel-body">
+							<span class="tools pull-right">
+                            	<button class="btn btn-info" type="button" onclick="streetSearch()">查询 <i
+                                        class="fa fa-search"></i></button>
+                            </span>
+                            <span class="col-sm-2 input-group tools pull-right">
+                                <span class="input-group-addon">乡镇街道名</span>
+                                <input type="text" class="form-control" placeholder="请输入乡镇街道名" id="sStreetTitle"/>
+                        	</span>
+                            <span class="col-sm-2 input-group tools pull-right">
+                                <span class="input-group-addon">乡镇街道编码</span>
+                                <input type="text" class="form-control" placeholder="请输入乡镇街道编码" id="sStreetCode"
+                                       onkeyup="value=value.replace(/[^0-9-]+/,'')"
+                                       onblur="value=value.replace(/[^0-9-]+/,'')"
+                                />
+                        	</span>
+                            <div class="adv-table" style="margin-top:40px;">
+                                <table id="streetTable" class="display compact" width="100%"></table>
+                            </div>
+                        </div>
+                    </section>
+                </div>
+            </div>
+
+            <!--  添加、编辑街道信息 start-->
+            <div class="modal fade" id="street_modal_info" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+                 aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                            <h4 class="modal-title">乡镇街道信息维护</h4>
+                        </div>
+                        <div class="modal-body row">
+                            <div class="col-md-12">
+                                <form class="form-horizontal" role="form" id="streetForm">
+                                    <input type="hidden" name="streetId" id="streetId" class="form-control"/>
+                                    <div class="form-group">
+                                        <label class="col-lg-3 col-sm-3 control-label">街道名称</label>
+                                        <div class="col-lg-9">
+                                            <div class="iconic-input">
+                                                <input type="text" name="streetTitle" id="streetTitle"
+                                                       class="form-control"/>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label class="col-lg-3 col-sm-3 control-label">编码</label>
+                                        <div class="col-lg-9">
+                                            <div class="right">
+                                                <input type="text" name="streetCode" id="streetCode"
+                                                       class="form-control"
+                                                       onkeyup="value=value.replace(/[^0-9-]+/,'')"
+                                                       onblur="value=value.replace(/[^0-9-]+/,'')"
+                                                />
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label class="col-lg-3 col-sm-3 control-label">说明</label>
+                                        <div class="col-lg-9">
+                                            <div class="iconic-input right">
+                                                <textarea rows="2" name="streetRemarks" id="streetRemarks"
+                                                          class="form-control"></textarea>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </form>
+                                <div class="pull-right">
+                                    <button style="display: none" id="insertStreet" class="btn btn-success btn-sm"
+                                            type="button" onclick="saveInsertStreet()">添加
+                                    </button>
+                                    <button style="display: none" id="updateStreet" class="btn btn-success btn-sm"
+                                            type="button" onclick="saveUpdateStreet()">修改
+                                    </button>
+                                    <button class="btn btn-danger btn-sm" type="button" onclick="cancelButton()">取消
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!--  添加用户、编辑用户信息 end-->
+
+        </div>
+    </div>
+</section>
+
+
+<!-- Placed js at the end of the document so the pages load faster -->
+
+<script type="text/javascript" th:src="@{/js/jquery-ui-1.9.2.custom.min.js}"></script>
+<script type="text/javascript" th:src="@{/js/jquery-migrate-1.2.1.min.js}"></script>
+<script type="text/javascript" th:src="@{/js/bootstrap.min.js}"></script>
+<script type="text/javascript" th:src="@{/js/modernizr.min.js}"></script>
+<script type="text/javascript" th:src="@{/js/jquery.nicescroll.js}"></script>
+
+<!--dynamic table-->
+<script type="text/javascript" language="javascript"
+        th:src="@{/js/advanced-datatable/js/jquery.dataTables.js}"></script>
+<script type="text/javascript" th:src="@{/js/data-tables/DT_bootstrap.js}"></script>
+<!--dynamic table initialization -->
+<script type="text/javascript" th:src="@{/js/dynamic_table_init.js}"></script>
+
+<!--common scripts for all pages-->
+<script type="text/javascript" th:src="@{/js/scripts.js}"></script>
+
+
+<script type="text/javascript" th:inline="javascript">
+    var table;
+    $(document).ready(function () {
+        // alert("roleId="+roles[i].roleId);
+        /* var token=[[${token}]];
+         alert("token"+token);
+         */
+        // var optionerType = [[${session.optionerType}]];
+        //   alert("optionerType"+optionerType);
+        // alert("userrole1");
+        table = $('#streetTable').DataTable({
+            "serverSide": true,
+            "ajax": {
+                'url': "../admin/selectAllStreet",
+                'type': 'get',
+                'data': function () {
+                }
+            },
+            "dom": 't<"bottom"ilp><"clear">',
+            "bPaginate": true,  //DataTables载入数据时，是否显示‘进度’提示
+            "bFilter": false,   //是否启动过滤、搜索功能
+            "bSort": false,     //是否启动各个字段的排序功能
+            "bInfo": true,      //是否显示页脚信息，DataTables插件左下角显示记录数
+            "oLanguage": {      //国际化配置
+                "sLengthMenu": "每页 _MENU_ 条数据",
+                "sZeroRecords": "对不起，查询不到任何相关数据",
+                "sInfoFiltered": "",
+                "sInfo": "当前显示 _START_ 到 _END_ 条，共 _TOTAL_ 条记录",
+                "sInfoEmpty": "找不到相关数据",
+            },
+            autoWidth: true,    //是否自适应宽度
+            columns: [
+                {data: 'streetTitle', title: '乡镇街道名'},
+                {data: 'streetCode', title: '乡镇街道编码'},
+                {data: 'streetRemarks', title: '说明'},
+                {
+                    data: 'streetId', title: "操作",
+                    sortable: false, //禁用排序功能
+                    /*
+                    data : 当前单元格的数据
+                    type: 当前列的类型
+                    row: 当前行完整的数据对象
+                     */
+                    render: function (data, type, row) {
+                        //alert("draw="+draw);
+                        // alert("data="+data+"  type="+type+"   row.Username="+row.Unit);
+                        return '<button class="btn btn-success btn-xs" type="button" ' +
+                            '<button class="btn btn-info btn-xs" type="button" onclick="updateStreet(' + data + ')">编辑</button> ' +
+                            '<button class="btn btn-danger btn-xs" type="button" onclick="delStreet(' + data + ')">删除</button>';
+                    }
+                }
+            ]
+        });
+
+
+        //给行绑定选中事件
+        $('#streetTable tbody').on('click', 'tr', function () {
+            if ($(this).hasClass('selected')) {
+                $(this).removeClass('selected');
+            }
+            else {
+                table.$('tr.selected').removeClass('selected');
+                $(this).addClass('selected');
+            }
+        });
+        $.fn.dataTable.ext.errMode = 'none';
+    });
+
+
+        function streetSearch() {
+            var param1 = {
+                "streetTitle": $("#streetTitle").val(),
+                "streetCode": $("#streetCode").val(),
+                "streetRemarks": $("#streetRemarks").val()
+            };
+            table.settings()[0].ajax.data = param1;
+            table.ajax.reload();
+        }
+
+
+    //点击添加街道按钮
+    function addStreet() {
+        $("#insertStreet").show();
+        $("#street_modal_info").modal("show");
+    }
+
+    //点击 添加乡镇街道的保存按钮
+    function saveInsertStreet() {
+       // var code=$("#streetCode").val();
+       // code.value = code.value.replace(/[^0-9-]+/,'');
+       // alert(typeof code);
+       // alert(code);
+       /* if(code.value = code.value.replace(/[^0-9-]+/,'')){
+            return alert("编码格式错误，请重新输入数字");
+        }*/
+       // function(){this.value=this.value.replace(/[^0-9-]+/,'');
+
+        $.ajax({
+            type: "POST",
+            url: '../admin/insertStreet',
+            dataType: "json",
+            data: {
+                "streetTitle": $("#streetTitle").val(),
+                "streetCode": $("#streetCode").val(),
+                "streetRemarks": $("#streetRemarks").val()
+            },
+            error: function () {
+                alert("添加街道失败，请重试");
+            },
+            success: function () {
+                table.ajax.reload();
+            }
+        });
+        $("#street_modal_info").modal("hide");
+    }
+
+    //删除单位
+    function delStreet(id) {
+        $.confirm({
+            title: '系统提示!',
+            content: '您确定要删除该信息吗？',
+            type: 'red',
+            buttons: {
+                ok: {
+                    text: '确认',
+                    btnClass: 'btn-primary',
+                    action: function () {
+                        $.ajax({
+                            type: "get",
+                            url: '../admin/deleteStreetByStreetId?streetId=' + id,
+                            //dataType: "text",
+                            dataType: "JSON",
+                            error: function () {
+                                alert("请求超时，请重试");
+                            },
+                            success: function (data) {
+                                if (data > 0) {
+                                    table.ajax.reload();
+                                    //alert("删除成功");
+                                } else {
+                                    alert("删除失败，请重试");
+                                }
+                            }
+                        });
+                    }
+                },
+                cancel: {
+                    text: '取消',
+                    btnClass: 'btn-primary',
+                    action: function () {
+                        // button action.
+                    }
+                },
+            }
+        });
+    }
+
+
+    //点击编辑街道信息按钮
+    function updateStreet(streetId) {
+       $("#updateStreet").show();
+        $("#street_modal_info").modal("show");
+        $('#streetTable tbody').on('click', 'tr', function () {
+            var tableData = table.row('.selected').data();
+            //alert(tableData.Name);
+            $("#streetId").val(tableData.streetId);
+            $("#streetTitle").val(tableData.streetTitle);
+            $("#streetCode").val(tableData.streetCode);
+            $("#streetRemarks").val(tableData.streetRemarks);
+        });
+    }
+
+    //点击 编辑乡镇街道的保存按钮
+    function saveUpdateStreet() {
+        $.ajax({
+            type: "POST",
+            url: '../admin/updateStreet',
+            dataType: "json",
+            data: {
+                "streetId":$("#streetId").val(),
+                "streetTitle": $("#streetTitle").val(),
+                "streetCode": $("#streetCode").val(),
+                "streetRemarks": $("#streetRemarks").val()
+            },
+            error: function () {
+                alert("编辑街道信息失败，请重试");
+            },
+            success: function () {
+                table.ajax.reload();
+                $("#street_modal_info").modal("hide");
+            }
+        });
+    }
+
+    //取消用户的增加或者编辑
+    function cancelButton() {
+        $("#street_modal_info").modal("hide");
+    }
+
+</script>
+</body>
+</html>

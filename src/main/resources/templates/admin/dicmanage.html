@@ -1,0 +1,527 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="ThemeBucket">
+    <link rel="shortcut icon" href="#" type="image/png">
+
+    <title>字典管理</title>
+
+    <link th:href="@{/css/style.css}" rel="stylesheet">
+    <link th:href="@{/css/style-responsive.css}" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="http://cdn.datatables.net/1.10.15/css/jquery.dataTables.css">
+    <link href="//cdn.bootcss.com/jquery-confirm/3.1.0/jquery-confirm.min.css" rel="stylesheet">
+    <script type="text/javascript" th:src="@{/js/jquery.min.js}"></script>
+    <script type="text/javascript" src="http://cdn.datatables.net/1.10.15/js/jquery.dataTables.js"></script>
+    <script type="text/javascript" th:src="@{/js/data-tables/DT_bootstrap.js}"></script>
+
+    <script src="//cdn.bootcss.com/jquery-confirm/3.1.0/jquery-confirm.min.js"></script>
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+    <script type="text/javascript" th:src="@{/js/html5shiv.js}"></script>
+    <script type="text/javascript" th:src="@{/js/respond.min.js}"></script>
+    <![endif]-->
+    <style>
+        .tool-flex {
+            width: 13%;
+            margin-left: 3px;
+        }
+
+        .toCentre {
+            position: relative;
+            top: 9px;
+            left: 20px;
+        }
+
+        .dataTables_length select {
+            padding: 0;
+        }
+    </style>
+</head>
+
+<body class="sticky-header">
+
+<section>
+    <!-- left side start-->
+    <div th:replace="common/left::left"></div>
+    <!-- left side end-->
+
+    <!-- main content start-->
+    <div class="main-content">
+
+        <!-- header section start-->
+        <div th:include="common/head:: head"></div>
+        <!-- header section end-->
+
+        <!-- page heading start-->
+
+        <!-- page heading end-->
+
+        <!--body wrapper start-->
+        <div class="wrapper">
+            <div class="row">
+
+                <div class="col-sm-5">
+                    <div class="panel">
+                        <header class="panel-heading">
+                            <span style="font-size:30px;">词条类型</span>
+                            <span class="tools pull-right label">
+	                               <button class="btn btn-primary btn-lg btn-block" type="button" onclick="addType(0)">增加类型+</button>
+	                             </span>
+                        </header>
+                        <div class="panel-body">
+                            <table class="table table-hover compact" id="dictype">
+
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-7">
+                    <div class="panel">
+                        <header class="panel-heading">
+                            <span style="font-size:30px;">词条项目</span>
+                            <span class="tools pull-right label">
+                               <button class="btn btn-primary btn-lg btn-block" type="button"
+                                       onclick="addItem(0)">增加词条+</button>
+                             </span>
+                        </header>
+                        <div class="panel-body">
+                            <table class="table table-hover compact" id="dicItem">
+
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--body wrapper end-->
+        <!-- Modal 字典类型增加、编辑-->
+        <div class="modal fade" id="type_modal_info" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+             aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                        <h4 class="modal-title">字典类型信息维护</h4>
+                    </div>
+                    <div class="modal-body row">
+                        <div class="col-md-12">
+                            <form class="form-horizontal" role="form" id="type_form">
+                                <input name="dicTypeId" type="hidden" class="form-control" id="dicTypeId">
+                                <div class="form-group">
+                                    <label class="col-lg-3 col-sm-3 control-label">类型名称</label>
+                                    <div class="col-lg-9">
+                                        <div class="iconic-input">
+                                            <input name="title" id="typetitle" type="text" class="form-control"
+                                                   placeholder="参数名称">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-lg-3 col-sm-3 control-label">类型说明</label>
+                                    <div class="col-lg-9">
+                                        <div class="iconic-input right">
+                                            <textarea name="remarks" id="typememo" rows="2"
+                                                      class="form-control"></textarea>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                            <div class="pull-right">
+                                <button class="btn btn-danger btn-sm" type="button" onclick="cancelTypeEdit()">取消
+                                </button>
+                                <button class="btn btn-success btn-sm" type="button" onclick="saveType()">保存</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- modal 词条类型弹框结束 -->
+
+        <!-- Modal 字典条目增加、编辑-->
+        <div class="modal fade" id="item_modal_info" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+             aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                        <h4 class="modal-title">字典条目信息维护</h4>
+                    </div>
+                    <div class="modal-body row">
+                        <div class="col-md-12">
+                            <form class="form-horizontal" role="form" id="item_form">
+                                <input name="dicItemId" type="hidden" class="form-control" id="dicItemId">
+                                <div class="form-group">
+                                    <label class="col-lg-3 col-sm-3 control-label">条目名称</label>
+                                    <div class="col-lg-9">
+                                        <div class="iconic-input">
+                                            <input name="title" id="itemtitle" type="text" class="form-control">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-lg-3 col-sm-3 control-label">所属类型</label>
+                                    <div class="col-lg-9">
+                                        <div class="right">
+                                            <select class="form-control" id="itemDicTypeId" name="dicTypeId">
+                                                <option value="1">1</option>
+                                                <option value="2">2</option>
+                                                <option>3</option>
+                                                <option>4</option>
+                                                <option>5</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-lg-3 col-sm-3 control-label">代码</label>
+                                    <div class="col-lg-9">
+                                        <div class="iconic-input">
+                                            <input name="code" id="itemcode" type="text" class="form-control">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-lg-3 col-sm-3 control-label">参数说明</label>
+                                    <div class="col-lg-9">
+                                        <div class="iconic-input right">
+                                            <textarea name="remarks" id="itemmemo" rows="2"
+                                                      class="form-control"></textarea>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                            <div class="pull-right">
+                                <button class="btn btn-danger btn-sm" type="button" onclick="cancelItemEdit()">取消
+                                </button>
+                                <button class="btn btn-success btn-sm" type="button" onclick="saveItem()">保存</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- modal 词条条目弹框结束 -->
+
+
+    </div>
+    <!-- main content end-->
+</section>
+
+<!-- Placed js at the end of the document so the pages load faster -->
+<script type="text/javascript" th:src="@{/js/jquery-ui-1.9.2.custom.min.js}"></script>
+<script type="text/javascript" th:src="@{/js/jquery-migrate-1.2.1.min.js}"></script>
+<script type="text/javascript" th:src="@{/js/bootstrap.min.js}"></script>
+<script type="text/javascript" th:src="@{/js/modernizr.min.js}"></script>
+<script type="text/javascript" th:src="@{/js/jquery.nicescroll.js}"></script>
+
+<!--common scripts for all pages-->
+<script type="text/javascript" th:src="@{/js/scripts.js}"></script>
+
+<script type="text/javascript" th:inline="javascript">
+    var typetable;
+    var itemtable;
+    var dicTypeJson;
+    $(document).ready(function () {
+        $("#type_modal_info").niceScroll({
+            styler: "fb",
+            cursorcolor: "#65cea7",
+            cursorwidth: '6',
+            cursorborderradius: '0px',
+            background: '#424f63',
+            spacebarenabled: false,
+            cursorborder: '0',
+            zindex: '1000'
+        });
+        typetable = $('#dictype').DataTable({
+            "serverSide": true,
+            "ajax": {
+                'url': '../admin/selectAllPageDicType',
+                'type': 'GET'
+            },
+            "dom": 't<"bottom"ilp><"clear">',
+            "bPaginate": true,
+            "bFilter": false,
+            "bSort": false,
+            "bLengthChange": true,  //每页显示的记录数
+            "bInfo": true,
+            "oLanguage": {
+                "sLengthMenu": "每页 _MENU_ 条数据",
+                "sZeroRecords": "对不起，查询不到任何相关数据",
+                "sInfoFiltered": "",
+                "sInfo": "当前显示 _START_ 到 _END_ 条，共 _TOTAL_ 条记录",
+                "sInfoEmpty": "找不到相关数据",
+            },
+            autoWidth: true,
+            columns: [
+                {data: 'title', title: '字典类型名称', width: "30%"},
+                {data: 'remarks', title: '说明', width: "40%"},
+                {
+                    data: 'dicTypeId', title: '操作', width: "30%", render: function (data, type, row) {
+                        return '<button class="btn btn-info btn-xs" type="button" onclick="addType(' + data + ')">编辑</button> <button class="btn btn-danger btn-xs" type="button" onclick="delType(' + data + ')">删除</button>';
+                    }
+                }
+            ]
+        });
+        //给行绑定选中事件
+        $('#dictype tbody').on('click', 'tr', function () {
+            if ($(this).hasClass('selected')) {
+                $(this).removeClass('selected');
+            }
+            else {
+                typetable.$('tr.selected').removeClass('selected');
+                $(this).addClass('selected');
+            }
+        });
+
+        itemtable = $('#dicItem').DataTable({
+            "serverSide": true,
+            "ajax": {
+                url: '../admin/selectAllDicItemJson',
+                type:'GET',
+                data: function (d) {
+                    d.typeId = 0;
+                }
+            },
+            "bPaginate": false,
+            "bFilter": false,
+            "bSort": false,
+            "bInfo": false,
+            autoWidth: true,
+            columns: [
+                {data: 'dicTypeId', title: '条目名称', visible: false},
+                {data: 'title', title: '条目名称', width: "25%"},
+                {data: 'code', title: '代码', width: "20%"},
+                {data: 'remarks', title: '备注说明', width: "25%"},
+                {
+                    data: 'dicItemId', title: '操作', width: "20%", render: function (data, type, row) {
+                        return '<button class="btn btn-info btn-xs" type="button" onclick="addItem(' + data + ')">编辑</button> <button class="btn btn-danger btn-xs" type="button" onclick="delItem(' + data + ')">删除</button>';
+                    }
+                }
+            ]
+        });
+        //给行绑定选中事件
+        $('#dicItem tbody').on('click', 'tr', function () {
+            if ($(this).hasClass('selected')) {
+                $(this).removeClass('selected');
+            }
+            else {
+                itemtable.$('tr.selected').removeClass('selected');
+                $(this).addClass('selected');
+            }
+        });
+
+        $('#dictype tbody').on('click', 'tr', function () {
+            var tableData = typetable.row('.selected').data();
+            //alert(tableData.dicTypeId);
+            var param = {"typeId": tableData.dicTypeId};
+            itemtable.settings()[0].ajax.data = param;
+            itemtable.ajax.reload();
+        });
+    });
+
+    function loadDicType() {
+        $.ajax({
+            type: "GET",
+            url: '../admin/selectAllDicType',
+            dataType: "json",
+            error: function (request) {
+                alert("请求超时，请重试");
+            },
+            success: function (rtn) {
+                $("#itemDicTypeId").html('');
+                for (var i = 0; i < rtn.length; i++) {
+                    var info = rtn[i];
+                    $("#itemDicTypeId").append('<option value="' + info.dicTypeId + '">' + info.title + '</option>');
+                }
+            }
+        });
+
+    }
+
+    //模态框有关处理
+    //$("#type_modal_info").modal('show');
+    //取消字典类型增加或者编辑
+    function cancelTypeEdit() {
+        $("#type_modal_info").modal("hide");
+    }
+
+    //取消字典条目的增加或者编辑
+    function cancelItemEdit() {
+        $("#item_modal_info").modal("hide");
+    }
+
+    //点击添加类型
+    function addType(id) {
+        if (id == 0) {
+            $(':input', '#type_form').val('');
+        } else {
+            $('#dictype tbody').on('click', 'tr', function () {
+                var tableData = typetable.row('.selected').data();
+                //alert(tableData);
+                $("#dicTypeId").val(tableData.dicTypeId);
+                $("#typetitle").val(tableData.title);
+                $("#typememo").val(tableData.remarks);
+            });
+        }
+        $("#type_modal_info").modal("show");
+    }
+
+    //点击添加词条
+    function addItem(id) {
+        loadDicType();
+        if (id == 0) {
+            $(':input', '#item_form').val('');
+        } else {
+            $('#dicItem tbody').on('click', 'tr', function () {
+                var tableData = itemtable.row('.selected').data();
+                $("#dicItemId").val(tableData.dicItemId);
+                $("#itemtitle").val(tableData.title);
+                $("#itemcode").val(tableData.code);
+                $("#itemDicTypeId").val(tableData.dicTypeId);
+                $("#itemmemo").val(tableData.remarks);
+
+            });
+        }
+        $("#item_modal_info").modal("show");
+    }
+
+    function saveType() {
+        var d = $('#type_form').serializeObject();
+        $.ajax({
+            type: "POST",
+            url: '../admin/insertOrUpdateDicType',
+            data: JSON.stringify(d),// 你的formid
+            contentType: "application/json;charset=utf-8",
+            dataType: "text",
+            error: function (request) {
+                alert("保存类型失败，请重试");
+            },
+            success: function (data) {
+                if (data > 0) {
+                    $("#type_modal_info").modal("hide");
+                    typetable.ajax.reload();
+                    //alert("插入成功");
+                } else {
+                    alert("插入失败，请重试");
+                }
+            }
+        });
+    }
+
+    function saveItem() {
+        var d = $('#item_form').serializeObject();
+        $.ajax({
+            type: "POST",
+            url: '../admin/insertDicItem',
+            data: JSON.stringify(d),// 你的formid
+            contentType: "application/json;charset=utf-8",
+            dataType: "text",
+            error: function (request) {
+                alert("请求超时，请重试");
+            },
+            success: function (data) {
+                if (data > 0) {
+                    $("#item_modal_info").modal("hide");
+                    itemtable.ajax.reload();
+                    //alert("词条项目操作成功");
+                } else {
+                    alert("插入失败，请重试");
+                }
+            }
+        });
+    }
+
+    //删除类型
+    function delType(id) {
+        $.confirm({
+            title: '系统提示!',
+            content: '您确定要删除该信息吗？',
+            type: 'red',
+            buttons: {
+                ok: {
+                    text: '确认',
+                    btnClass: 'btn-primary',
+                    action: function () {
+                        $.ajax({
+                            type: "get",
+                            url: '../admin/deleteDicType?dicTypeId=' + id,
+                            dataType: "text",
+                            error: function (request) {
+                                alert("请求超时，请重试");
+                            },
+                            success: function (data) {
+                                if (data > 0) {
+                                    typetable.ajax.reload();
+                                    //alert("删除成功");
+                                } else {
+                                    alert("删除失败，请重试");
+                                }
+                            }
+                        });
+                    }
+                },
+                cancel: {
+                    text: '取消',
+                    btnClass: 'btn-primary',
+                    action: function () {
+                        // button action.
+                    }
+                },
+            }
+        });
+    }
+
+    //删除条目
+    function delItem(id) {
+        $.confirm({
+            title: '系统提示!',
+            content: '您确定要删除该信息吗？',
+            type: 'red',
+            buttons: {
+                ok: {
+                    text: '确认',
+                    btnClass: 'btn-primary',
+                    action: function () {
+                        $.ajax({
+                            type: "get",
+                            url: '../admin/deleteDicItem?dicItemId=' + id,
+                            dataType: "text",
+                            error: function (request) {
+                                alert("请求超时，请重试");
+                            },
+                            success: function (data) {
+                                if (data > 0) {
+                                    itemtable.ajax.reload();
+                                    //alert("删除成功");
+                                } else {
+                                    alert("删除失败，请重试");
+                                }
+                            }
+                        });
+                    }
+                },
+                cancel: {
+                    text: '取消',
+                    btnClass: 'btn-primary',
+                    action: function () {
+                        // button action.
+                    }
+                },
+            }
+        });
+    }
+
+/*    function initNav() {
+        $(".menu-list").removeClass("nav-active");
+        $("#navdic").css("color", "#65cea7");
+        $("#navdic").parent().parent().parent('.menu-list').addClass("nav-active");
+    }*/
+
+</script>
+<!--<script src="js/init/initmap.js"></script>-->
+</body>
+</html>

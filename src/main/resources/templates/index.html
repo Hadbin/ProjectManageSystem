@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <title>登录</title>
+    <link rel="stylesheet" href="./css/reset.css" />
+    <link rel="stylesheet" href="./css/common.css" />
+    <script src="http://cdn.static.runoob.com/libs/jquery/2.1.1/jquery.min.js"></script>
+</head>
+
+<body >
+<div class="wrap login_wrap">
+    <div class="content" style="margin-top:30px;">
+
+        <div class="logo"></div>
+
+        <div class="login_box">
+
+            <div class="login_form">
+                <div class="login_title">登录</div>
+                <form action="user/login" method="post">
+
+                    <div class="form_text_ipt">
+                        <input name="username" id="username" type="text" placeholder="用户名"/>
+                    </div>
+                    <div class="ececk_warning">
+                        <span>数据不能为空</span>
+                    </div>
+                    <div class="form_text_ipt">
+                        <input name="password" type="password" id="password" placeholder="密码"/>
+                    </div>
+                    <div class="ececk_warning">
+                        <span>数据不能为空</span>
+                    </div>
+                    <div class="form_check_ipt">
+                        <div class="left check_left">
+                            <label>
+                                <input name="" type="checkbox"/> 下次自动登录</label>
+                        </div>
+                        <div class="right check_right">
+                            <a href="#">忘记密码</a>
+                        </div>
+                    </div>
+                    <div class="form_btn">
+                        <button type="submit" id="btn-login">登录</button>
+                    </div>
+
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript" src="./js/jquery.min.js"></script>
+<script type="text/javascript" src="./js/common.js"></script>
+<script type="text/javascript" src="./js/address.js"></script>
+<script type="text/javascript" src="https://cdn.bootcss.com/jquery-cookie/1.4.1/jquery.cookie.js"></script>
+
+<!--
+<script type="text/javascript" th:inline="javascript">
+    $("#btn-login").click(function () {
+        var token=[[${token}]];
+        alert("token"+token);
+        $.ajax({
+            url: httpaddress+ 'user/login',
+            data: {
+                "username": $("#username").val(),
+                "password": $("#password").val()
+            },
+            type: 'post',
+            /*xhrFields: {
+                withCredentials: true
+            },
+            crossDomain: true,*/
+            success: function (data) {
+
+                console.log(data);
+                alert("token"+data);
+                sessionStorage.setItem('token', data.token);   //保存在session中
+                sessionStorage.setItem('optionerType', data.optionerType);//保存在session中
+
+                 var token=sessionStorage.getItem('token');
+                /!*var optionerType=sessionStorage.getItem('optionerType');*!/
+                console.log(token);
+               // alert(data.data.optionerType);
+               // alert("session="+session);
+                if(data.code==101) {
+                    if (data.optionerType == 7) {//管理员的操作员类别=7
+                        console.log(data);
+                        alert("userrole");
+                        //alert("templates_index");
+                         //window.location.href=httpaddress+ 'user/login/token';
+
+                    }
+                }if(data.code==102)
+                {
+                    alert("账号或者密码错误")
+                }
+            },
+            error: function () {
+                console.log("发生错误啦");
+            }
+        });
+    });
+
+
+</script>-->
+
+</body>
+
+</html>

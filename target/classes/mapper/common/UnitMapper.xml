@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="edu.nbut.project_manage.dao.common.UnitDao">
+    <select id="selectAllUnit" resultType="edu.nbut.project_manage.bean.entity.Unit">
+        select *
+        from Unit
+        order by Title
+    </select>
+   <select id="getUnitInfoById" resultType="edu.nbut.project_manage.bean.entity.Unit">
+      select *
+      from Unit
+      where UnitId=#{unitId}
+   </select>
+    <!--<resultMap id="BaseResultMap" type="edu.nbut.project_manage.bean.entity.Unit">
+        <id column="UnitId" jdbcType="INTEGER" property="unitId"/>
+        <result column="Title" jdbcType="VARCHAR" property="title"/>
+        <result column="Address" jdbcType="VARCHAR" property="address" />
+        <result column="Person1" jdbcType="VARCHAR" property="person1" />
+        <result column="Phone1" jdbcType="VARCHAR" property="phone1" />
+        <result column="Position1" jdbcType="VARCHAR" property="position1" />
+        <result column="Person2" jdbcType="VARCHAR" property="person2" />
+        <result column="Phone2" jdbcType="VARCHAR" property="phone2" />
+        <result column="Position2" jdbcType="VARCHAR" property="position2" />
+        <result column="UnitType" jdbcType="SMALLINT" property="unitType" />
+        <result column="Remarks" jdbcType="VARCHAR" property="memo" />
+        <association property="typeName" column="UnitType" select="edu.nbut.project_manage.dao.admin.DicItemDao.selectByPrimaryKey"></association>
+    </resultMap>
+    <select id="getAllUnit" resultMap="BaseResultMap">
+        select * from Unit
+    </select>-->
+    <update id="updateUnitTitle" parameterType="String" >
+        update unit set Title =#{title} where UnitId in (
+	    select UnitId from UserInfo where UserId=#{userId});
+    </update>
+<!--    <select id="getUnitTitle" parameterType="Integer" resultType="String">
+        select Title from Unit where UnitId in ( select UnitId from UserInfo where UserId=#{userId});
+    </select>-->
+</mapper>

@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="edu.nbut.project_manage.dao.common.UserRoleDao">
+
+    <select id="getUserRole" resultType="edu.nbut.project_manage.bean.entity.UserRole"
+            parameterType="java.lang.Integer">
+      SELECT Role.RoleId, Role.Title, Role.Remarks, UserId,
+	    CASE WHEN UserId IS NULL THEN 0 ELSE 1 END AS Checked
+	      FROM Role LEFT OUTER JOIN (SELECT UserRole.RoleId, UserId,UserRoleId FROM UserRole
+	        WHERE (UserId=#{UserId})) AS T ON Role.RoleId = T.RoleId ORDER BY Role.RoleId
+    </select>
+
+    <insert id="addUserRole" parameterType="edu.nbut.project_manage.bean.entity.UserRole">
+        insert into UserRole
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="userId != null">
+                UserId,
+            </if>
+            <if test="roleId != null">
+                RoleId,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="userId != null">
+                #{userId,jdbcType=INTEGER},
+            </if>
+            <if test="roleId != null">
+                #{roleId,jdbcType=INTEGER},
+            </if>
+        </trim>
+    </insert>
+
+    <insert id="addUserRoleByUserId" parameterType="String">
+        insert into UserRole
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="userId !=null || roleId !=null">
+                UserId,RoleId
+            </if>
+        </trim>
+        <trim prefix=" values (" suffix=")" suffixOverrides=",">
+
+            <if test="userId !=null || roleId !=null">
+                #{userId}, #{roleId}
+            </if>
+
+        </trim>
+    </insert>
+    <select id="selectUserIdByUsername" parameterType="String">
+
+    </select>
+    <delete id="deleteUserRole" parameterType="edu.nbut.project_manage.bean.entity.UserRole">
+    delete from UserRole where UserId=#{userId} and RoleId=#{roleId}
+  </delete>
+</mapper>

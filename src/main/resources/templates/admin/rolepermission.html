@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+  <meta name="description" content="">
+  <meta name="author" content="ThemeBucket">
+  <link rel="shortcut icon" href="#" type="image/png">
+
+  <title>角色权限管理</title>
+
+  <link rel="stylesheet" type="text/css" th:href="@{/easyui/themes/default/easyui.css}">
+  <link th:href="@{/css/style.css}" rel="stylesheet">
+  <link th:href="@{/css/style-responsive.css}" rel="stylesheet">
+  <link rel="stylesheet" type="text/css" th:href="@{/js/table/jquery.dataTables.css}">
+  <link rel="stylesheet" type="text/css" th:href="@{/easyui/themes/icon.css}">
+  <link href="//cdn.bootcss.com/jquery-confirm/3.1.0/jquery-confirm.min.css" rel="stylesheet">
+  <script type="text/javascript" th:src="@{/js/jquery.min.js}"></script>
+  <script type="text/javascript" charset="utf8" th:src="@{/js/table/jquery.dataTables.js}"></script>
+  <script type="text/javascript" th:src="@{/js/data-tables/DT_bootstrap.js}"></script>
+  <script type="text/javascript" th:src="@{/easyui/jquery.easyui.min.js}"></script>
+  <script type="text/javascript" th:src="@{/easyui/locale/easyui-lang-zh_CN.js}"></script>
+  <script src="//cdn.bootcss.com/jquery-confirm/3.1.0/jquery-confirm.min.js"></script>
+  <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+  <!--[if lt IE 9]>
+  <script type="text/javascript" th:src="@{/js/html5shiv.js}"></script>
+  <script type="text/javascript" th:src="@{/js/respond.min.js}"></script>
+  <![endif]-->
+</head>
+
+<body class="sticky-header">
+
+<section>
+    <!-- left side start-->
+    <div th:replace="common/left::left"></div>
+    <!-- left side end-->
+    
+    <!-- main content start-->
+    <div class="main-content" >
+
+        <!-- header section start-->
+        <div th:include="common/head:: head"></div>
+        <!-- header section end-->
+
+        <!-- page heading start-->
+       
+        <!-- page heading end-->
+
+        <!--body wrapper start-->
+        <div class="wrapper">
+            <div class="row">
+            
+            <div class="col-sm-7">
+                <section class="panel">
+                    <header class="panel-heading">
+                        	<span style="font-size:30px;">角色信息</span>
+                            <span class="tools pull-right label">
+                               <button class="btn btn-primary btn-lg btn-block" type="button" onclick="addRole(0)">增加角色+</button>
+                             </span>
+                    </header>
+                    <div class="panel-body">
+                        <table class="table table-hover compact" id="roletable">
+                           
+                        </table>
+                    </div>
+                </section>
+            </div>
+            <div class="col-sm-5">
+                <section class="panel">
+                    <header class="panel-heading">
+                     	   <span style="font-size:30px;">功能设置</span>
+                    </header>
+                    <div class="panel-body">
+                    	<ul id="rftree"></ul>
+                    </div>
+                </section>
+            </div>
+        </div>
+        </div>
+        <!--body wrapper end-->
+		<!-- Modal 角色增加、编辑-->
+        <div class="modal fade" id="role_modal_info" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                        <h4 class="modal-title">角色信息维护</h4>
+                    </div>
+                    <div class="modal-body row">
+                        <div class="col-md-12">
+	                        	<form class="form-horizontal" role="form" id="role_form">
+	                        	<input name="roleid" type="hidden" class="form-control" id="roleid">
+	                            <div class="form-group">
+	                                <label  class="col-lg-3 col-sm-3 control-label">角色名称</label>
+	                                <div class="col-lg-9">
+	                                    <div class="iconic-input">
+	                                        <input name="title" id="roletitle" type="text" class="form-control">
+	                                    </div>
+	                                </div>
+	                            </div>
+	                            <div class="form-group">
+	                            	<label  class="col-lg-3 col-sm-3 control-label">角色说明</label>
+	                                <div class="col-lg-9">
+	                                    <div class="iconic-input right">
+	                                       <textarea name="memo" id="rolememo" rows="2" class="form-control"></textarea>
+	                                    </div>
+	                                </div>
+	                            </div>
+	                        </form>
+	                        <div class="pull-right">
+	                       		<button class="btn btn-success btn-sm" type="button" onclick="saveRole()">保存</button>
+	                            <button class="btn btn-danger btn-sm" type="button" onclick="cancelRoleEdit()">取消</button>
+	                            
+	                        </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- modal 角色弹框结束 -->
+
+
+    </div>
+    <!-- main content end-->
+</section>
+
+<!-- Placed js at the end of the document so the pages load faster -->
+<script type="text/javascript" th:src="@{/js/jquery-ui-1.9.2.custom.min.js}"></script>
+<script type="text/javascript" th:src="@{/js/jquery-migrate-1.2.1.min.js}"></script>
+<script type="text/javascript" th:src="@{/js/bootstrap.min.js}"></script>
+<script type="text/javascript" th:src="@{/js/modernizr.min.js}"></script>
+<script type="text/javascript" th:src="@{/js/jquery.nicescroll.js}"></script>
+
+<!--common scripts for all pages-->
+<script type="text/javascript" th:src="@{/js/scripts.js}"></script>
+
+<script type="text/javascript" th:inline="javascript">
+var table;
+	$(document).ready(function() {
+	    table=$('#roletable').DataTable( {
+	    	"serverSide": true,
+	        "ajax": "../admin/getAllRole",
+	        "bPaginate":false,
+	        "bFilter":false,
+	        "bSort":false,
+	        "bInfo":false,
+	        autoWidth:true,
+	        columns: [
+	            { data: 'title',title:'角色名称',width:"40%" },
+	            { data: 'remarks',title:'说明',width:"40%" },
+	            {data:'roleId',title:'操作',width:"20%",render:function(data,type,row){
+	            	return '<button class="btn btn-info btn-xs" type="button" onclick="addRole('+data+')">编辑</button> <button class="btn btn-danger btn-xs" type="button" onclick="delRole('+data+')">删除</button>'; 
+	            }}
+	        ]
+	    });
+	    //给行绑定选中事件
+	   $('#roletable tbody').on( 'click', 'tr', function () {
+	      if ($(this).hasClass('selected')) {
+	          $(this).removeClass('selected');
+	      }
+	      else {
+	      	table.$('tr.selected').removeClass('selected');
+	          $(this).addClass('selected');
+	          
+	          var tableData = table.row('.selected').data();
+				$('#rftree').tree({
+        			url:'../admin/getRolePermission?roleId='+tableData.roleId
+        		});
+	      }
+	  });
+	});
+	
+	//取消角色增加或者编辑
+	function cancelRoleEdit(){
+		$("#role_modal_info").modal("hide");
+	}
+	
+	//点击添加角色
+	function addRole(id){
+			if(id==0){
+				$(':input','#role_form').val('');
+			}else{
+				$('#roletable tbody').on('click', 'tr', function () {
+					var tableData = table.row('.selected').data();
+			        $("#roletitle").val(tableData.title);
+			        $("#roleid").val(tableData.roleid);
+			        $("#rolememo").val(tableData.remarks);
+			    });
+			}
+		$("#role_modal_info").modal("show");
+	}
+	
+	function saveRole(){
+		var d=$('#role_form').serializeObject();
+		$.ajax({
+	        type: "POST",
+	        url:'addRole.spring',
+	        data:JSON.stringify(d),// 你的formid
+	        contentType: "application/json;charset=utf-8",
+	        dataType: "text",
+	        error: function(request) {
+	            alert("请求超时，请重试");
+	        },
+	        success: function(data) {
+	           if(data>0){
+	        	 $("#role_modal_info").modal("hide");
+	        	 table.ajax.reload();
+	        	 alert("插入成功");
+	           }else{
+	        	   alert("插入失败，请重试");
+	           }
+	        }
+	    });
+	}
+	
+	//删除类型
+	function delRole(id){
+		$.confirm({
+	    title: '系统提示!',
+	    content: '您确定要删除该信息吗？',
+	    type:'red',
+	    buttons: {
+	        ok: {
+	            text: '确认',
+	            btnClass: 'btn-primary',
+	            action: function(){
+	            	$.ajax({
+	    		        type: "get",
+	    		        url:'deleteRoleById.spring?roleid='+id,
+	    		        dataType: "text",
+	    		        error: function(request) {
+	    		            alert("请求超时，请重试");
+	    		        },
+	    		        success: function(data) {
+	    		           if(data>0){
+	    		        	 table.ajax.reload();
+	    		        	 alert("删除成功");
+	    		           }else{
+	    		        	   alert("删除失败，请重试");
+	    		           }
+	    		        }
+	    		    });
+	            }
+	        },
+	        cancel: {
+	            text: '取消',
+	            btnClass: 'btn-primary',
+	            action: function(){
+	                // button action.
+	            }
+	        },
+	     }
+		});
+	}
+//编辑角色的权限
+	$(function(){
+		$('#rftree').tree({
+	    	url:'../admin/getRolePermission?roleId=0',
+	        width:480,
+	        height:300,
+	        method:'get',
+	    	  checkbox:true,
+	    	  cascadeCheck:false,
+	    	  onlyLeafCheck:true,
+	    	  onCheck:function(node, checked) {
+	    		var row =table.rows('.selected').data()[0];
+				if(row==undefined){alert("请先选择一行再进行设置");}
+				else{
+					$.get("updateRolePermission",
+						{
+                            roleId: row.roleId,
+							parentId:  node['id'],
+                            checked:  checked  },
+						function(data) {
+							//if (data.length>0) alert(data);
+						});
+				}
+   			}
+   		});
+	})
+	
+/*	function initNav(){
+		$(".menu-list").removeClass("nav-active");
+		$("#navrole").css("color","#65cea7");
+		$("#navrole").parent().parent().parent('.menu-list').addClass("nav-active");
+	}*/
+
+</script>
+<!--<script src="js/init/initmap.js"></script>-->
+</body>
+</html>

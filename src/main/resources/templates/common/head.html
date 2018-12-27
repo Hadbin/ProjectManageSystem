@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="ThemeBucket">
+
+</head>
+
+<body class="sticky-header">
+<div th:fragment="head">
+    <!-- main content start-->
+
+    <!-- header section start-->
+    <div class="header-section">
+
+        <!--notification menu start -->
+        <div class="menu-right">
+            <ul class="notification-menu">
+
+                <li>
+                    <a href="#" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+                        <img src="images/photos/useravatar.png" alt=""/>
+                        <span th:text="${session.userInfo.name}"> </span>
+                        <span class="caret"></span>
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-usermenu pull-right">
+                        <li><a href="javascript:void(0)" onclick='queryInfo()'><i class="fa fa-user"></i>基本信息</a></li>
+                        <li><a href="javascript:void(0)" onclick='setInfo()'><i class="fa fa-cog"></i>密码修改</a></li>
+                        <li><a th:href="@{../index}" onclick='logout()'><i class="fa fa-sign-out"></i>退出</a></li>
+                    </ul>
+                </li>
+
+            </ul>
+        </div>
+        <!--notification menu end -->
+    </div>
+    <!-- 用户基本信息框 -->
+    <div class="modal fade" id="infodialog" tabindex="-1" role="dialog" data-backdrop='static' aria-hidden="true">
+        <div class="modal-dialog" style="width:25%">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title">基本信息</h4>
+                </div>
+                <div class="modal-body row">
+                    <div class="col-md-12">
+                        <form class="form-horizontal" role="form" id="user_formhead">
+                            <input type="hidden" name="userid" id="useridhead" class="form-control">
+                            <div class="form-group">
+                                <label class="col-lg-3 col-sm-3 control-label">用户姓名</label>
+                                <div class="col-lg-9">
+                                    <div class="iconic-input">
+                                        <input type="text" name="name" id="realnamehead" class="form-control"
+                                               readonly="readonly">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-lg-3 col-sm-3 control-label">单位</label>
+                                <div class="col-lg-9">
+                                    <div class="iconic-input">
+                                        <select class="form-control initunit" id="unitnamehead" name="unitid"
+                                                readonly="readonly">
+
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="col-lg-3 col-sm-3 control-label">登录名</label>
+                                <div class="col-lg-9">
+                                    <div class="right">
+                                        <input type="text" name="username" id="usernamehead" class="form-control"
+                                               readonly="readonly">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-lg-3 col-sm-3 control-label">密码</label>
+                                <div class="col-lg-9">
+                                    <div class="right">
+                                        <input type="password" name="password" id="pwdhead" class="form-control"
+                                               readonly="readonly">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="col-lg-3 col-sm-3 control-label">用户类型</label>
+                                <div class="col-lg-9">
+                                    <div class="iconic-input">
+                                        <select class="form-control initusertype" id="usertypehead" name="usertype"
+                                                readonly="readonly">
+
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-lg-3 col-sm-3 control-label">用户状态</label>
+                                <div class="col-lg-9">
+                                    <div class="iconic-input">
+                                        <select class="form-control inituserstatus" id="userstatushead" name="status"
+                                                readonly="readonly">
+
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="col-lg-3 col-sm-3 control-label">说明</label>
+                                <div class="col-lg-9">
+                                    <div class="iconic-input right">
+                                        <textarea rows="2" name="memo" id="memohead" class="form-control"
+                                                  readonly="readonly"></textarea>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                        <div class="pull-right">
+                            <button class="btn btn-danger btn-sm" type="button" onclick="cancelUserEdit1()">取消</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--用户基本信息框  结束-->
+
+    <!-- 用户设置框 -->
+    <div class="modal fade" id="setdialog" tabindex="-1" role="dialog" data-backdrop='static' aria-hidden="true">
+        <div class="modal-dialog" style="width:25%">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title">用户密码修改</h4>
+                </div>
+                <div class="modal-body row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label> 旧密码</label>
+                            <input id="oldpwd" class="form-control" type="password"/>
+                        </div>
+                        <div class="form-group">
+                            <label>新密码</label>
+                            <input id="newpwd" name="password" class="form-control" type="password"/>
+                        </div>
+                        <div class="form-group">
+                            <label>确认密码</label>
+                            <input id="newpwd2" class="form-control" type="password"/>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" id="titleok" class="btn btn-primary">修改</button>
+                    <button type="button" id="cancel" class="btn btn-default" data-dismiss="modal">取消</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--用户设置框  结束-->
+
+    <script type="text/javascript" th:inline="javascript">
+        $(document).ready(function () {
+            var optionerType = [[${session.optionerType}]];
+           // alert("optionerType="+optionerType);
+
+            var showtime = title_getToday() + "," + title_getWeek();
+            $("#titletime").append("<span>" + showtime + "</span>");
+
+
+            var userid = "<%=u.getUserid()%>";
+            //getUserInfo(userid);
+
+            $("#titleok").click(function () {
+                if ($("#oldpwd").val() == "<%=u.getPassword()%>") {
+                    if ($("#newpwd").val() == $("#newpwd2").val()) {
+                        var d = '{"userid":' + userid + ',"password":' + $('#newpwd').val() + '}';
+                        var postStr = "userid=" + userid + "&password=" + $('#newpwd').val();
+                        $.ajax({
+                            type: "Post",
+                            url: "updateUserPwd.spring",
+                            data: postStr,
+                            async: false,
+                            dataType: "text",
+                            success: function (data) {
+                                if (data > 0) {
+                                    window.location.href = "login.jsp";
+                                }
+                                else {
+                                    alert("密码修改失败，请重试");
+                                }
+                            },
+                            error: function () {
+                                alert("加载失败");
+                            }
+                        });
+                    } else {
+                        alert("两次密码输入不一致");
+                    }
+                } else {
+                    alert("密码输入错误");
+                }
+            });
+
+
+        });
+
+
+        function title_getToday() {
+            var date = new Date();
+            var y = date.getFullYear();
+            var m = date.getMonth() + 1;
+            var d = date.getDate();
+            return y + "-" + m + "-" + d;
+        }
+
+        function title_getWeek() {
+            var numWeekDay = new Date().getDay();
+            if (numWeekDay == 0) {
+                return '周日';
+            } else if (numWeekDay == 1) {
+                return '周一';
+            } else if (numWeekDay == 2) {
+                return '周二';
+            } else if (numWeekDay == 3) {
+                return '周三';
+            } else if (numWeekDay == 4) {
+                return '周四';
+            } else if (numWeekDay == 5) {
+                return '周五';
+            } else if (numWeekDay == 6) {
+                return '周六';
+            } else {
+                return '';
+            }
+        }
+
+
+        function queryInfo() {
+            $("#useridhead").val("<%=u.getUserid()%>");
+            $("#realnamehead").val("<%=u.getName()%>");
+            $("#unitnamehead").val("<%=u.getUnitid()%>");
+            $("#usernamehead").val("<%=u.getUsername()%>");
+            $("#pwdhead").val("<%=u.getPassword()%>");
+            $("#deptidhead").val("<%=u.getDept()%>");
+            $("#usertypehead").val("<%=u.getUsertype()%>");
+            $("#userstatushead").val("<%=u.getStatus()%>");
+            $("#memohead").val("<%=u.getMemo()%>");
+            $("#infodialog").modal('show');
+        }
+
+        function setInfo() {
+            $("#setdialog").modal('show');
+        }
+
+        function cancelUserEdit1() {
+            $("#infodialog").modal('hide');
+        }
+
+        function getUserInfo(id) {
+            alert("<%=u.getUnitid()%>");
+            $("#useridhead").val("<%=u.getUserid()%>");
+            $("#realnamehead").val("<%=u.getName()%>");
+            $("#unitnamehead").val("<%=u.getUnitid()%>");
+            $("#usernamehead").val("<%=u.getUsername()%>");
+            $("#pwdhead").val("<%=u.getPassword()%>");
+            $("#deptidhead").val("<%=u.getDept()%>");
+            $("#usertypehead").val("<%=u.getUsertype()%>");
+            $("#userstatushead").val("<%=u.getStatus()%>");
+            $("#memohead").val("<%=u.getMemo()%>");
+        }
+
+        function logout() {
+
+        }
+    </script>
+</div>
+</body>
+</html>

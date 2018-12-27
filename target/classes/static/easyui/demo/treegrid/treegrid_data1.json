@@ -1,0 +1,166 @@
+ [
+        {
+            "OpName": "喻寄",
+            "MldDtl": "/",
+            "Devc": "/",
+            "Num": 60,
+            "children": [
+                {
+                    "OpName": "喻寄",
+                    "MldDtl": "203系列",
+                    "Devc": "CY-07",
+                    "Num": 60,
+                    "OpId": "1"
+                }
+            ]
+        },
+        {
+            "OpName": "印罡",
+            "MldDtl": "/",
+            "Devc": "/",
+            "Num": 60,
+            "children": [
+                {
+                    "OpName": "印罡",
+                    "MldDtl": "203系列",
+                    "Devc": "CY-04",
+                    "Num": 40,
+                    "OpId": "2"
+                },
+                {
+                    "OpName": "印罡",
+                    "MldDtl": "203系列",
+                    "Devc": "CY-04",
+                    "Num": 20,
+                    "OpId": "2"
+                }
+            ]
+        },
+        {
+            "OpName": "郑红梅",
+            "MldDtl": "/",
+            "Devc": "/",
+            "Num": 50,
+            "children": [
+                {
+                    "OpName": "郑红梅",
+                    "MldDtl": "203系列",
+                    "Devc": "CY-06",
+                    "Num": 50,
+                    "OpId": "3"
+                }
+            ]
+        },
+        {
+            "OpName": "祁发秀",
+            "MldDtl": "/",
+            "Devc": "/",
+            "Num": 80,
+            "children": [
+                {
+                    "OpName": "祁发秀",
+                    "MldDtl": "203系列",
+                    "Devc": "CY-02",
+                    "Num": 70,
+                    "OpId": "4"
+                },
+                {
+                    "OpName": "祁发秀",
+                    "MldDtl": "203系列",
+                    "Devc": "CY-02",
+                    "Num": 10,
+                    "OpId": "4"
+                }
+            ]
+        },
+        {
+            "OpName": "牟加英",
+            "MldDtl": "/",
+            "Devc": "/",
+            "Num": 30,
+            "children": [
+                {
+                    "OpName": "牟加英",
+                    "MldDtl": "203系列",
+                    "Devc": "CY-05",
+                    "Num": 30,
+                    "OpId": "5"
+                }
+            ]
+        },
+        {
+            "OpName": "王厚琼",
+            "MldDtl": "/",
+            "Devc": "/",
+            "Num": 10,
+            "children": [
+                {
+                    "OpName": "王厚琼",
+                    "MldDtl": "203系列",
+                    "Devc": "CY-03",
+                    "Num": 10,
+                    "OpId": "6"
+                }
+            ]
+        },
+        {
+            "OpName": "谭光秀",
+            "MldDtl": "/",
+            "Devc": "/",
+            "Num": 45,
+            "children": [
+                {
+                    "OpName": "谭光秀",
+                    "MldDtl": "206-235大骨",
+                    "Devc": "CY-04",
+                    "Num": 45,
+                    "OpId": "7"
+                }
+            ]
+        },
+        {
+            "OpName": "杨新庄",
+            "MldDtl": "/",
+            "Devc": "/",
+            "Num": 100,
+            "children": [
+                {
+                    "OpName": "杨新庄",
+                    "MldDtl": "206-300大骨",
+                    "Devc": "1#钢片机",
+                    "Num": 100,
+                    "OpId": "8"
+                }
+            ]
+        },
+        {
+            "OpName": "彭美菊",
+            "MldDtl": "/",
+            "Devc": "/",
+            "Num": 20,
+            "children": [
+                {
+                    "OpName": "彭美菊",
+                    "MldDtl": "203系列",
+                    "Devc": "2#钢片机",
+                    "Num": 20,
+                    "OpId": "9"
+                }
+            ]
+        },
+        {
+            "OpName": "粟凡春",
+            "MldDtl": "/",
+            "Devc": "/",
+            "Num": 10,
+            "children": [
+                {
+                    "OpName": "粟凡春",
+                    "MldDtl": "203系列",
+                    "Devc": "3#钢片机",
+                    "Num": 10,
+                    "OpId": "10"
+                }
+            ]
+        }
+    ]

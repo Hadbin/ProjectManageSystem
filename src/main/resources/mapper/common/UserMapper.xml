@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="edu.nbut.project_manage.dao.common.UserDao">
+
+    <resultMap id="getRoles" type="edu.nbut.project_manage.bean.entity.Role">
+        <id property="roleId" column="RoleId"/>
+        <result property="title" column="Title"/>
+        <result property="remarks" column="Remarks"/>
+        <!--<result property="permissions" column="permissions" />-->
+    </resultMap>
+    <resultMap id="getPermissions" type="edu.nbut.project_manage.bean.entity.Permission">
+        <id property="permissionId" column="PermissionId"/>
+        <result property="title" column="Title"/>
+        <result property="idx" column=" Idx"/>
+        <result property="parentId" column="ParentId"/>
+        <result property="url" column="Url"/>
+        <result property="remarks" column="Remarks"/>
+    </resultMap>
+    <select id="getUserRole" resultMap="getRoles" parameterType="Integer">
+        select * from Role where RoleId in(
+	      select RoleId from UserRole where UserId in (
+	        select UserId from UserInfo where UserId=#{UserId}))
+    </select>
+    <!--根据用户的角色ID获取权限 start-->
+    <select id="getRolePermission" resultMap="getPermissions" parameterType="Integer">
+        select * from Permission where PermissionId in (
+	      select PermissionId from RolePermission where RoleId=#{RoleId} )
+
+    </select>
+    <!--根据用户的角色ID获取权限 end-->
+    <select id="findById" resultType="UserInfo" parameterType="Integer">
+        select *
+        from UserInfo
+        where UserId=#{UserId}
+    </select>
+    <select id="judgeUsername" parameterType="String" resultType="edu.nbut.project_manage.bean.entity.UserInfo">
+        select *
+        from UserInfo
+        where Username=#{username}
+    </select>
+    <select id="findByUsername" resultType="UserInfo" parameterType="String">
+        SELECT *
+        FROM UserInfo
+        WHERE Username = #{Username}
+    </select>
+    <select id="login" resultType="UserInfo" parameterType="String">
+        select *
+        from UserInfo
+        where Username=#{username} and Password=#{password}
+    </select>
+    <select id="findAllUser" resultType="UserInfo">
+        select *
+        from UserInfo
+        where Status=1
+        order by UserId
+
+    </select>
+    <select id="findUserIdByUsername" resultType="Integer">
+        select UserId
+        from UserInfo
+        where Username=#{username}
+    </select>
+    <insert id="insertUser" parameterType="String">
+        insert into UserInfo
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="realName != null">
+                Name,
+            </if>
+            <if test="unitId !=null">
+                UnitId,
+            </if>
+            <if test="username !=null">
+                Username,
+            </if>
+            <if test="password !=null">
+                Password,
+            </if>
+            <if test="position !=null">
+                Postion,
+            </if>
+            <if test="regDate !=null">
+                RegDate,
+            </if>
+
+            <if test="remarks !=null">
+                Remarks
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="realName != null">
+                #{realName},
+            </if>
+            <if test="unitId !=null">
+                #{unitId},
+            </if>
+            <if test="username !=null">
+                #{username},
+            </if>
+            <if test="password !=null">
+                #{password},
+            </if>
+            <if test="position !=null">
+                #{position},
+            </if>
+            <if test="regDate !=null">
+                #{regDate},
+            </if>
+            <if test="remarks !=null">
+                #{remarks}
+            </if>
+        </trim>
+    </insert>
+    <update id="updateUserInfo" parameterType="edu.nbut.project_manage.bean.entity.UserInfo">
+        update UserInfo
+        <set>
+            <if test="name != null">
+                Name = #{name,jdbcType=VARCHAR},
+            </if>
+            <if test="username != null">
+                UserName = #{username,jdbcType=VARCHAR},
+            </if>
+            <if test="password != null">
+                Password = #{password,jdbcType=VARCHAR},
+            </if>
+            <if test="remarks != null">
+                Remarks = #{remarks,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where UserId=#{userId,jdbcType=INTEGER}
+    </update>
+
+    <update id="deleteUserByUserId" parameterType="java.lang.Integer">
+    update UserInfo set status=0
+    where UserId=#{userId,jdbcType=INTEGER};
+  </update>
+
+
+    <!--    <select id="judgeType" resultType="Integer" parameterType="Integer">
+            select RoleId from Role where RoleId in(
+              select RoleId from UserRole where UserId =#{UserId})
+        </select>-->
+
+
+</mapper>
